@@ -30,3 +30,4 @@
 	qcom,board-id = <11 1>;
 };
 
+#include NUBIA_OVERWRITE_DTSI_FILE
