@@ -213,6 +213,8 @@ source "drivers/fpga/Kconfig"
 
 source "drivers/fsi/Kconfig"
 
+source "drivers/nubia_hw_version/Kconfig"
+
 source "drivers/tee/Kconfig"
 
 source "drivers/mux/Kconfig"
@@ -220,5 +222,7 @@ source "drivers/mux/Kconfig"
 source "drivers/sensors/Kconfig"
 
 source "drivers/esoc/Kconfig"
+
+source "drivers/nubia/Kconfig"
 
 endmenu
