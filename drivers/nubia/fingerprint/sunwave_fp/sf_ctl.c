@@ -237,11 +237,7 @@ static irqreturn_t sf_ctl_device_irq(int irq, void *dev_id)
     disable_irq_nosync(irq);
     xprintk(SF_LOG_LEVEL, "%s(irq = %d, ..) toggled.\n", __FUNCTION__, irq);
     schedule_work(&sf_ctl_dev.work_queue);
-#ifdef CONFIG_PM_WAKELOCKS
     __pm_wakeup_event(&sf_ctl_dev.wakelock, msecs_to_jiffies(5000));
-#else
-    wake_lock_timeout(&sf_ctl_dev.wakelock, msecs_to_jiffies(5000));
-#endif
 #if SF_INT_TRIG_HIGH
     sf_ctl_set_irq_type(IRQF_TRIGGER_RISING | IRQF_NO_SUSPEND | IRQF_ONESHOT);
 #endif
@@ -647,11 +643,7 @@ static int sf_remove(sf_device_t *spi)
         }
 
         misc_deregister(&sf_ctl_dev.miscdev);
-#ifdef CONFIG_PM_WAKELOCKS
         wakeup_source_trash(&sf_ctl_dev.wakelock);
-#else
-        wake_lock_destroy(&sf_ctl_dev.wakelock);
-#endif
         sf_ctl_dev.free_gpio(&sf_ctl_dev);
         sf_platform_exit(&sf_ctl_dev);
         sf_ctl_dev.pdev = NULL;
@@ -684,11 +676,7 @@ static int sf_probe(sf_device_t *dev)
         return err;
     }
 
-#ifdef CONFIG_PM_WAKELOCKS
     wakeup_source_init(&sf_ctl_dev.wakelock , "sf_wakelock");
-#else
-    wake_lock_init(&sf_ctl_dev.wakelock, WAKE_LOCK_SUSPEND, "sf_wakelock");
-#endif
     /* Initialize the GPIO pins. */
 #if MULTI_HAL_COMPATIBLE
     xprintk(KERN_INFO, " do not initialize the GPIO pins. \n");
